@@ -10,6 +10,11 @@
   fill: brown;
 }
 
+.slider {
+  fill: grey;
+
+}
+
 .axis {
   font: 10px sans-serif;
 }
@@ -52,8 +57,10 @@ var yAxis = d3.svg.axis()
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .on("mousemove", function(){return tooltip.style("top",
+      (d3.event.pageY-10)+"px").style("left",(84+10)+"px");})
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 d3.tsv("data.tsv", type, function(error, data) {
   x.domain(data.map(function(d) { return d.name; }));
@@ -64,27 +71,47 @@ d3.tsv("data.tsv", type, function(error, data) {
       .data(data)
     .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", 'A')
-      .attr("width", x.rangeBand())
+      .attr("width", 30)
       .attr("y", function(d) { return y(d.percent); })
-      .attr("height", .5);
-      
+      .attr("height", 1)
+      .on("mouseover", function(d) { return tooltip.style("visibility", "visible").text(d.name);})
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+      .on("click", function(d){
+        console.log(d);
+        d3.select(".slider")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", y(d.percent)-10 )});
 });
 
 svg.append("rect")
   .attr("width", 30)
-  .attr("height", height)
-  .attr("x", 'A');
+  .attr("height", height);
 
 svg.append("rect")
-  .attr("width", 40)
-  .attr("height", 5)
-  .attr("x", 'A')
-  .attr("y", 100)
-  .fill("grey");
+  .attr("class", "slider")
+  .attr("width", 60)
+  .attr("height", 20)
+  .attr("x", -15)
+  .attr("y", 450);
+
+var tooltip = d3.select("body")
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .text("a simple tooltip");
+
+function transition(element, start, end) {
+    element.transition()
+        .duration(duration)
+        .attr("y", end)
+        .each("end", function() { d3.select(this).call(transition, end, start); });
+} 
 
 function type(d) {
-  d.frequency = +d.frequency;
+  d.percent = +d.percent;
   return d;
 }
 
