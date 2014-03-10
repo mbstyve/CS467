@@ -30,6 +30,10 @@
   display: none;
 }
 
+.bins {
+  fill: black;
+}
+
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -54,6 +58,12 @@ var yAxis = d3.svg.axis()
     .orient("left")
     .ticks(10, "%");
 
+var bins = [];
+for(var i = 0; i < 10; i++){
+  bin = new Array();
+  bins.push(bin);
+}
+
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -63,6 +73,10 @@ var svg = d3.select("body").append("svg")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 d3.tsv("data.tsv", type, function(error, data) {
+  data.forEach(function(d) {
+      bins[Math.floor(d.percent*10)].push(d);
+  });
+
   x.domain(data.map(function(d) { return d.name; }));
   y.domain(data.map(function(d) { return d.percent; }));
 
@@ -95,6 +109,29 @@ svg.append("rect")
   .attr("height", 20)
   .attr("x", -15)
   .attr("y", 450);
+
+for(var i = 0; i < 10; i++) (function(i){
+    //not sure how to get callback function working (cant access 'i')
+    svg.append("rect")
+      .attr("class", "bins")
+      .attr("width", 30)
+      .attr("height", height/10)
+      .attr("x", 100)
+      .attr("y", i*(height/10))
+      .on("mouseover", function(i){ 
+          console.log(i);
+          d3.select(this).style("fill","grey");
+          var tool = "";
+          for( var person in bins[i]){
+            console.log(person);
+            tool += (person.name+": "+person.percent);
+          }
+          console.log(tool);
+          return tooltip.style("visibility", "visible").text(tool);
+        })
+      .on("click", function (){  })
+      .on("mouseout", function(){ d3.select(this).style("fill","black");});    
+  }) (i);
 
 var tooltip = d3.select("body")
     .append("div")
