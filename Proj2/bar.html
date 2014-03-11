@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+@font-face{
+    font-family:'Moonhouse';
+    src:url(moonhouse.ttf); /*This depends where you have uploaded your font */ }
 
-.bar {
+body{
+  background: url('viusualization1.png') no-repeat   ;
+
+
+}
+
+.bar0 {
   fill: white;
 }
 
-.bar:hover {
+.bar1:hover {
   fill: brown;
 }
 
@@ -34,14 +43,27 @@
   fill: black;
 }
 
+svg{
+  right: 500px;
+
+}
+
+.display {
+  font-family: Moonhouse;
+  fill: green;
+  text-align: center;
+}
+
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = 1500 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+var offset = 85;
 
 var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1);
@@ -66,40 +88,596 @@ for(var i = 0; i < 10; i++){
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("height", 750 + margin.top + margin.bottom)
     .on("mousemove", function(){return tooltip.style("top",
-      (d3.event.pageY-10)+"px").style("left",(84+10)+"px");})
+      (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
     .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + 300+ "," + 400 + ")");
 
 d3.tsv("data.tsv", type, function(error, data) {
   data.forEach(function(d) {
-      bins[Math.floor(d.percent*10)].push(d);
+     // bins[Math.floor(d.HipHop/Pop*10)].push(d);
   });
 
-  x.domain(data.map(function(d) { return d.name; }));
-  y.domain(data.map(function(d) { return d.percent; }));
+  x.domain(data.map(function(d) { return d.name.toUpperCase(); }));
+  //y.domain(data.map(function(d) { return d.percent; }));
 
 
-  svg.selectAll(".bar")
+  svg.selectAll(".bar0")
       .data(data)
     .enter().append("rect")
-      .attr("class", "bar")
+      .attr("class", "bar0")
       .attr("width", 30)
-      .attr("y", function(d) { return y(d.percent); })
+      .attr("y", function(d) { return height*d.HipHop_Pop; })
       .attr("height", 1)
       .on("mouseover", function(d) { return tooltip.style("visibility", "visible").text(d.name);})
       .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
       .on("click", function(d){
-        console.log(d);
+        d3.select(".display")
+          .transition()
+          .text(d.name.toUpperCase());
         d3.select(".slider")
           .transition()
           .duration(1000)
           .ease("cubic-in-out")
-          .attr("y", y(d.percent)-10 )});
+          .attr("y", (height*d.HipHop_Pop)-10 )
+        d3.select(".slider1")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Alternative)-10 )
+        d3.select(".slider2")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Electronic)-10 )
+        d3.select(".slider3")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Pop)-10 )
+        d3.select(".slider4")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Alternative)-10)
+        d3.select(".slider5")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Electronic)-10 )
+        d3.select(".slider6")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Pop)-10 )
+        d3.select(".slider7")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Alternative)-10 )
+        d3.select(".slider8")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Electronic)-10 )});
+
+
+  svg.selectAll(".bar1")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar0")
+      .attr("width", 30)
+      .attr("x", 85)
+      .attr("y", function(d) { return height*d.HipHop_Alternative; })
+      .attr("height", 1)
+      .on("mouseover", function(d) { return tooltip.style("visibility", "visible").text(d.name);})
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+      .on("click", function(d){
+        d3.select(".display")
+          .text(d.name.toUpperCase());
+        d3.select(".slider")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Pop)-10 )
+        d3.select(".slider1")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Alternative)-10 )
+        d3.select(".slider2")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Electronic)-10 )
+        d3.select(".slider3")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Pop)-10 )
+        d3.select(".slider4")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Alternative)-10)
+        d3.select(".slider5")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Electronic)-10 )
+        d3.select(".slider6")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Pop)-10 )
+        d3.select(".slider7")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Alternative)-10 )
+        d3.select(".slider8")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Electronic)-10 )});
+
+  svg.selectAll(".bar2")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar0")
+      .attr("width", 30)
+      .attr("x", 170)
+      .attr("y", function(d) { return height*d.HipHop_Electronic; })
+      .attr("height", 1)
+      .on("mouseover", function(d) { return tooltip.style("visibility", "visible").text(d.name);})
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+      .on("click", function(d){
+        d3.select(".display")
+          .text(d.name.toUpperCase());
+        d3.select(".slider")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Pop)-10 )
+        d3.select(".slider1")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Alternative)-10 )
+        d3.select(".slider2")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Electronic)-10 )
+        d3.select(".slider3")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Pop)-10 )
+        d3.select(".slider4")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Alternative)-10)
+        d3.select(".slider5")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Electronic)-10 )
+        d3.select(".slider6")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Pop)-10 )
+        d3.select(".slider7")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Alternative)-10 )
+        d3.select(".slider8")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Electronic)-10 )});
+
+  svg.selectAll(".bar3")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar0")
+      .attr("width", 30)
+      .attr("x", 255)
+      .attr("y", function(d) { return height*d.Rock_Pop; })
+      .attr("height", 1)
+      .on("mouseover", function(d) { return tooltip.style("visibility", "visible").text(d.name);})
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+      .on("click", function(d){
+        d3.select(".display")
+          .text(d.name.toUpperCase());
+        d3.select(".slider")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Pop)-10 )
+        d3.select(".slider1")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Alternative)-10 )
+        d3.select(".slider2")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Electronic)-10 )
+        d3.select(".slider3")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Pop)-10 )
+        d3.select(".slider4")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Alternative)-10)
+        d3.select(".slider5")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Electronic)-10 )
+        d3.select(".slider6")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Pop)-10 )
+        d3.select(".slider7")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Alternative)-10 )
+        d3.select(".slider8")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Electronic)-10 )});
+
+  svg.selectAll(".bar4")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar0")
+      .attr("width", 30)
+      .attr("x", 340)
+      .attr("y", function(d) { return height*d.Rock_Alternative; })
+      .attr("height", 1)
+      .on("mouseover", function(d) { return tooltip.style("visibility", "visible").text(d.name);})
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+      .on("click", function(d){
+        d3.select(".display")
+          .text(d.name.toUpperCase());
+        d3.select(".slider")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Pop)-10 )
+        d3.select(".slider1")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Alternative)-10 )
+        d3.select(".slider2")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Electronic)-10 )
+        d3.select(".slider3")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Pop)-10 )
+        d3.select(".slider4")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Alternative)-10)
+        d3.select(".slider5")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Electronic)-10 )
+        d3.select(".slider6")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Pop)-10 )
+        d3.select(".slider7")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Alternative)-10 )
+        d3.select(".slider8")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Electronic)-10 )});
+
+  svg.selectAll(".bar5")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar0")
+      .attr("width", 30)
+      .attr("x", 425)
+      .attr("y", function(d) { return height*d.Rock_Electronic; })
+      .attr("height", 1)
+      .on("mouseover", function(d) { return tooltip.style("visibility", "visible").text(d.name);})
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+      .on("click", function(d){
+        d3.select(".display")
+          .text(d.name.toUpperCase());
+        d3.select(".slider")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Pop)-10 )
+        d3.select(".slider1")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Alternative)-10 )
+        d3.select(".slider2")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Electronic)-10 )
+        d3.select(".slider3")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Pop)-10 )
+        d3.select(".slider4")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Alternative)-10)
+        d3.select(".slider5")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Electronic)-10 )
+        d3.select(".slider6")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Pop)-10 )
+        d3.select(".slider7")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Alternative)-10 )
+        d3.select(".slider8")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Electronic)-10 )});
+
+  svg.selectAll(".bar6")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar0")
+      .attr("width", 30)
+      .attr("x", 510)
+      .attr("y", function(d) { return height*d.Country_Pop; })
+      .attr("height", 1)
+      .on("mouseover", function(d) { return tooltip.style("visibility", "visible").text(d.name);})
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+      .on("click", function(d){
+        d3.select(".display")
+          .text(d.name.toUpperCase());
+        d3.select(".slider")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Pop)-10 )
+        d3.select(".slider1")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Alternative)-10 )
+        d3.select(".slider2")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Electronic)-10 )
+        d3.select(".slider3")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Pop)-10 )
+        d3.select(".slider4")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Alternative)-10)
+        d3.select(".slider5")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Electronic)-10 )
+        d3.select(".slider6")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Pop)-10 )
+        d3.select(".slider7")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Alternative)-10 )
+        d3.select(".slider8")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Electronic)-10 )});
+
+  svg.selectAll(".bar7")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar0")
+      .attr("width", 30)
+      .attr("x", 595)
+      .attr("y", function(d) { return height*d.Country_Alternative; })
+      .attr("height", 1)
+      .on("mouseover", function(d) { return tooltip.style("visibility", "visible").text(d.name);})
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+      .on("click", function(d){
+        d3.select(".display")
+          .text(d.name.toUpperCase());
+        d3.select(".slider")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Pop)-10 )
+        d3.select(".slider1")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Alternative)-10 )
+        d3.select(".slider2")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Electronic)-10 )
+        d3.select(".slider3")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Pop)-10 )
+        d3.select(".slider4")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Alternative)-10)
+        d3.select(".slider5")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Electronic)-10 )
+        d3.select(".slider6")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Pop)-10 )
+        d3.select(".slider7")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Alternative)-10 )
+        d3.select(".slider8")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Electronic)-10 )});
+
+  svg.selectAll(".bar8")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar0")
+      .attr("width", 30)
+      .attr("x", 680)
+      .attr("y", function(d) { return height*d.Country_Electronic; })
+      .attr("height", 1)
+      .on("mouseover", function(d) { return tooltip.style("visibility", "visible").text(d.name);})
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+      .on("click", function(d){
+        d3.select(".display")
+          .text(d.name.toUpperCase());
+        d3.select(".slider")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Pop)-10 )
+        d3.select(".slider1")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Alternative)-10 )
+        d3.select(".slider2")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.HipHop_Electronic)-10 )
+        d3.select(".slider3")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Pop)-10 )
+        d3.select(".slider4")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Alternative)-10)
+        d3.select(".slider5")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Rock_Electronic)-10 )
+        d3.select(".slider6")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Pop)-10 )
+        d3.select(".slider7")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Alternative)-10 )
+        d3.select(".slider8")
+          .transition()
+          .duration(1000)
+          .ease("cubic-in-out")
+          .attr("y", (height*d.Country_Electronic)-10 )});
+
 });
 
 svg.append("rect")
+  .attr("width", 30)
+  .attr("height", height);
+
+svg.append("rect")
+  .attr("x", 85)
+  .attr("width", 30)
+  .attr("height", height);
+
+svg.append("rect")
+  .attr("x", 170)
+  .attr("width", 30)
+  .attr("height", height);
+
+svg.append("rect")
+  .attr("x", 255)
+  .attr("width", 30)
+  .attr("height", height);
+
+svg.append("rect")
+  .attr("x", 340)
+  .attr("width", 30)
+  .attr("height", height);
+
+svg.append("rect")
+  .attr("x", 425)
+  .attr("width", 30)
+  .attr("height", height);
+
+svg.append("rect")
+  .attr("x", 510)
+  .attr("width", 30)
+  .attr("height", height);
+
+svg.append("rect")
+  .attr("x", 595)
+  .attr("width", 30)
+  .attr("height", height);
+
+svg.append("rect")
+  .attr("x", 680)
   .attr("width", 30)
   .attr("height", height);
 
@@ -108,37 +686,233 @@ svg.append("rect")
   .attr("width", 60)
   .attr("height", 20)
   .attr("x", -15)
-  .attr("y", 450);
+  .attr("y", height-10);
 
-for(var i = 0; i < 10; i++) (function(i){
-    //not sure how to get callback function working (cant access 'i')
-    svg.append("rect")
-      .attr("class", "bins")
-      .attr("width", 30)
-      .attr("height", height/10)
-      .attr("x", 100)
-      .attr("y", i*(height/10))
-      .on("mouseover", function(i){ 
-          console.log(i);
-          d3.select(this).style("fill","grey");
-          var tool = "";
-          for( var person in bins[i]){
-            console.log(person);
-            tool += (person.name+": "+person.percent);
-          }
-          console.log(tool);
-          return tooltip.style("visibility", "visible").text(tool);
-        })
-      .on("click", function (){  })
-      .on("mouseout", function(){ d3.select(this).style("fill","black");});    
-  }) (i);
+svg.append("rect")
+  .attr("class", "slider1")
+  .attr("width", 60)
+  .attr("height", 20)
+  .attr("x", 70)
+  .attr("y", height-10)
+  .attr("fill", "grey");
+
+svg.append("rect")
+  .attr("class", "slider2")
+  .attr("width", 60)
+  .attr("height", 20)
+  .attr("x", 155)
+  .attr("y", height-10)
+  .attr("fill", "grey");
+
+svg.append("rect")
+  .attr("class", "slider3")
+  .attr("width", 60)
+  .attr("height", 20)
+  .attr("x", 240)
+  .attr("y", height-10)
+  .attr("fill", "grey");
+
+svg.append("rect")
+  .attr("class", "slider4")
+  .attr("width", 60)
+  .attr("height", 20)
+  .attr("x", 325)
+  .attr("y", height-10)
+  .attr("fill", "grey");
+
+svg.append("rect")
+  .attr("class", "slider5")
+  .attr("width", 60)
+  .attr("height", 20)
+  .attr("x", 410)
+  .attr("y", height-10)
+  .attr("fill", "grey");
+
+svg.append("rect")
+  .attr("class", "slider6")
+  .attr("width", 60)
+  .attr("height", 20)
+  .attr("x", 495)
+  .attr("y", height-10)
+  .attr("fill", "grey");
+
+svg.append("rect")
+  .attr("class", "slider7")
+  .attr("width", 60)
+  .attr("height", 20)
+  .attr("x", 580)
+  .attr("y", height-10)
+  .attr("fill", "grey");
+
+svg.append("rect")
+  .attr("class", "slider8")
+  .attr("width", 60)
+  .attr("height", 20)
+  .attr("x", 665)
+  .attr("y", height-10)
+  .attr("fill", "grey");
 
 var tooltip = d3.select("body")
     .append("div")
     .style("position", "absolute")
     .style("z-index", "10")
     .style("visibility", "hidden")
-    .text("a simple tooltip");
+    .style("background","lightsteelblue")
+    .style("border","1px solid")
+    .style("border-radius","10px")
+    .style("box-shadow", "3px 3px 5px #888888")
+    .style("padding","2px")
+    .style("opacity",.9)
+    .text("a simple tooltip")
+    .style("color", "black");
+
+    svg.append("text")
+      .text("Hip Hop")
+      .attr("x", -5)
+      .attr("y", -12)
+      .style("font-size", "12")
+      .attr("fill", "grey");
+
+    svg.append("text")
+      .text("Hip Hop")
+      .attr("x", (1*offset)-5)
+      .attr("y", -12)
+      .style("font-size", "12")
+      .attr("fill", "grey");
+
+
+        svg.append("text")
+      .text("Hip Hop")
+      .attr("x", (2*offset)-5)
+      .attr("y", -12)
+      .attr("fill", "grey")
+      .style("font-size", "12");
+
+        svg.append("text")
+      .text("Rock")
+      .attr("x", (3*offset)+2)
+      .attr("y", -12)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+        svg.append("text")
+      .text("Rock")
+      .attr("x", (4*offset)+2)
+      .attr("y", -12)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+
+        svg.append("text")
+      .text("Rock")
+      .attr("x", (5*offset)+2)
+      .attr("y", -12)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+
+        svg.append("text")
+      .text("Country")
+      .attr("x", (6*offset)-5)
+      .attr("y", -12)
+      .style("font-size", "12")      
+      .attr("fill", "grey");
+
+
+    svg.append("text")
+      .text("Country")
+      .attr("x", (7*offset)-5)
+      .attr("y", -12)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+
+    svg.append("text")
+      .text("Country")
+      .attr("x", (8*offset)-5)
+      .attr("y", -12)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+
+    svg.append("text")
+      .text("Pop")
+      .attr("x", 5)
+      .attr("y", height+20)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+
+    svg.append("text")
+      .text("Alternative")
+      .attr("x", (1*offset)-15)
+      .attr("y", height+20)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+
+        svg.append("text")
+      .text("Electronic")
+      .attr("x", (2*offset)-5)
+      .attr("y", height+20)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+
+        svg.append("text")
+      .text("Pop")
+      .attr("x", (3*offset)+5)
+      .attr("y", height+20)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+
+        svg.append("text")
+      .text("Alternative")
+      .attr("x", (4*offset)-15)
+      .attr("y", height+20)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+
+        svg.append("text")
+      .text("Electronic")
+      .attr("x", (5*offset)-5)
+      .attr("y", height+20)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+
+        svg.append("text")
+      .text("Pop")
+      .attr("x", (6*offset)+5)
+      .attr("y", height+20)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+
+        svg.append("text")
+      .text("Alternative")
+      .attr("x", (7*offset)-15)
+      .attr("y", height+20)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+
+    svg.append("text")
+      .text("Electronic")
+      .attr("x", (8*offset)-5)
+      .attr("y", height+20)
+      .style("font-size", "12")
+            .attr("fill", "grey");
+
+    svg.append("text")
+      .attr("class","display")
+      .text("SELECT A FRIEND...")
+      .attr("x", 270)
+      .attr("y", -270);
+
+
 
 function transition(element, start, end) {
     element.transition()
